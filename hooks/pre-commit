@@ -1,10 +1,17 @@
 #!/bin/bash
 #
-# This pre-commit hook will check for the configured tag
-# and won't allow a commit to be done when this tag is present.
-# This tag can then be used to prevent checking in sensitive lines,
-# e.g. lines containing passwords.
+# This pre-commit hook will check for the configured tag and won't allow a 
+# commit to be done when this tag is present.
+# This tag can then be used to prevent checking in sensitive lines, e.g. lines
+# containing passwords.
 #
+# To temporarily disable this script, for example to commit documentation
+# describing this functionality, set the ALLOW_FORBIDDEN_TAG environment
+# variable:
+# export ALLOW_FORBIDDEN_TAG=1
+#
+# This can be removed again by
+# unset ALLOW_FORBIDDEN_TAG
 
 # Exit if undeclared variables are used
 set -o nounset
