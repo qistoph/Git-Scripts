@@ -15,6 +15,12 @@ set -o errexit
 # Print each command to stdout before executing it
 # set -o verbose
 
+if [ ! -z ${ALLOW_FORBIDDEN_TAG:-} ]
+then
+	echo "ALLOW_FORBIDDEN_TAG set"
+	exit
+fi
+
 FORBIDDEN_TAG="NOCOMMIT"
 
 if git rev-parse --verify HEAD >/dev/null 2>&1
