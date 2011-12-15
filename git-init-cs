@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Exit if undeclared variables are used
+set -o nounset
+
+# Exit if any command exits with error
+set -o errexit
+
+# Print each command to stdout before executing it
+# set -o verbose
+
+echo "Git init"
+git init
+
+echo "Creating .gitignore"
+cat >> .gitignore <<EOF
+*.suo
+*.user
+bin
+obj
+/Backup/
+/UpgradeLog.XML
+/_UpgradeReport_Files/
+EOF
+
+echo "Add standard hooks"
+ln -s ~/scripts/git/hooks/pre-commit .git/hooks/
+
+#git add .

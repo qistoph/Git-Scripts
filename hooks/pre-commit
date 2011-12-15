@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#
+# This pre-commit hook will check for the configured tag
+# and won't allow a commit to be done when this tag is present.
+# This tag can then be used to prevent checking in sensitive lines,
+# e.g. lines containing passwords.
+#
+
+FORBIDDEN_TAG="NOCOMMIT"
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+if git grep -n --cached "$FORBIDDEN_TAG"
+then
+	echo
+	echo "The commit contains \"$FORBIDDEN_TAG\", commiting this is prevented by"
+	echo "the pre-commit hook. Please review the file(s) containing the forbidden text"
+	echo "To show 3 lines of context around the found \"$FORBIDDEN_TAG\" use:"
+	echo "git grep -n -C 3 --cached \"$FORBIDDEN_TAG\""
+	exit 1
+fi
