@@ -1,11 +1,19 @@
-#!/bin/sh
-
+#!/bin/bash
 #
 # This pre-commit hook will check for the configured tag
 # and won't allow a commit to be done when this tag is present.
 # This tag can then be used to prevent checking in sensitive lines,
 # e.g. lines containing passwords.
 #
+
+# Exit if undeclared variables are used
+set -o nounset
+
+# Exit if any command exits with error
+set -o errexit
+
+# Print each command to stdout before executing it
+# set -o verbose
 
 FORBIDDEN_TAG="NOCOMMIT"
 
