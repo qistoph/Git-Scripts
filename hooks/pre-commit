@@ -16,6 +16,13 @@
 # # change the password below
 # password="example"
 #
+# This hook is intended to assist in preventing commits of sensitive data.
+# Whenever I use a secret in code I now add a NOCOMMIT line, just to help
+# me remember to remove the sensitive data first.
+# For a more defenitive solution, when the sensitive data is required for
+# testing for example, I use config.sample files in git with a local copy
+# containing the sensitive data.
+#
 # To temporarily disable this script, for example to commit documentation
 # describing this functionality, set the ALLOW_FORBIDDEN_TAG environment
 # variable:
