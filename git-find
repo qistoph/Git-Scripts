@@ -31,7 +31,7 @@ function git-find-help() {
 	echo
 	echo "Available METHODs:"
 	echo "  ahead             find git repositories ahead of origin."
-	echo "  uncommitted       find git repositories with uncommited changes."
+	echo "  uncommitted       find git repositories with uncommitted changes."
 	echo
 	echo "For information about the METHOD OPTIONS use"
 	echo "  $0 <method> --help"
