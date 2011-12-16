@@ -20,11 +20,6 @@ function control_c() {
 
 trap control_c SIGINT
 
-if [ ${#*} -lt 1 ]; then
-	echo "Not enough arguments, specify find method."
-	exit 1
-fi
-
 function git-find-help() {
 	echo "Usage: $0 <METHOD> [METHOD OPTIONS]"
 	echo "Find git repositories using the specified method."
@@ -165,6 +160,13 @@ function search-uncommitted() {
 		fi
 	done
 }
+
+if [ ${#*} -lt 1 ]; then
+	echo "Not enough arguments, specify find method."
+	echo
+	git-find-help
+	exit 1
+fi
 
 case "$1" in
 ahead)
