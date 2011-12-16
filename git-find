@@ -51,7 +51,7 @@ function search-ahead() { #{{{
 	for ARG in ${@:2}; do
 		# echo "ARG: $ARG"
 		case "$ARG" in
-			--help)
+			-h|--help|-help)
 				help-ahead
 				exit
 				;;
@@ -115,7 +115,7 @@ function search-uncommitted() { #{{{
 	for ARG in ${@:2}; do
 		# echo "ARG: $ARG"
 		case "$ARG" in
-			--help)
+			-h|--help|-help)
 				help-uncommitted
 				exit
 				;;
