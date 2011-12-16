@@ -78,7 +78,8 @@ function search-ahead() {
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
-		AHEAD_INFO=$(git --work-tree "$WORK_TREE" --git-dir "$GIT_DIR" status | grep "is ahead of ")
+		AHEAD_INFO=$(git --work-tree "$WORK_TREE" \
+			--git-dir "$GIT_DIR" status | grep "is ahead of ")
 		GREP_RES=$?
 		set -o errexit # restore exit on error
 
@@ -140,21 +141,26 @@ function search-uncommitted() {
 		esac
 	done
 
-	[ $TRACKED_FILES_ONLY -gt 0 ] && GREP_LINE="^# Changes" || GREP_LINE="^# Changes\|^# Untracked"
+	[ $TRACKED_FILES_ONLY -gt 0 ] && \
+		GREP_LINE="^# Changes" || \
+		GREP_LINE="^# Changes\|^# Untracked"
 
 	echo "Searching in $TARGET_DIR"
 	for GIT_DIR in $(find "$TARGET_DIR" -name '.git'); do
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
-		AHEAD_INFO=$(git --work-tree "$WORK_TREE" --git-dir "$GIT_DIR" status | grep "$GREP_LINE")
+		AHEAD_INFO=$(git --work-tree "$WORK_TREE" \
+			--git-dir "$GIT_DIR" status | grep "$GREP_LINE")
 		GREP_RES=$?
 		set -o errexit # restore exit on error
 
 		if [ $GREP_RES -eq 0 ]; then
 			echo "$WORK_TREE"
 			[ $DETAIL_INFO -gt 0 ] && echo "$AHEAD_INFO"
-			[ $FULL_DETAIL -gt 0 ] && git --work-tree "$WORK_TREE" --git-dir "$GIT_DIR" status
+			[ $FULL_DETAIL -gt 0 ] && \
+				git --work-tree "$WORK_TREE" \
+					--git-dir "$GIT_DIR" status
 			[ $WHITE_LINE -gt 0 ] && echo
 		fi
 	done
