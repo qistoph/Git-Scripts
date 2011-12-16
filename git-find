@@ -14,13 +14,13 @@ set -o nounset
 # Exit if any command exits with error
 set -o errexit
 
-function control_c() {
+function control_c() { #{{{
 	exit 1
-}
+} #}}}
 
 trap control_c SIGINT
 
-function git-find-help() {
+function git-find-help() { #{{{
 	echo "Usage: $0 <METHOD> [METHOD OPTIONS]"
 	echo "Find git repositories using the specified method."
 	echo
@@ -30,9 +30,9 @@ function git-find-help() {
 	echo
 	echo "For information about the METHOD OPTIONS use"
 	echo "  $0 <method> --help"
-}
+} #}}}
 
-function help-ahead() {
+function help-ahead() { #{{{
 	echo "Usage: $0 ahead [path]"
 	echo "Find git repositories ahead of origin."
 	echo
@@ -41,9 +41,9 @@ function help-ahead() {
 	echo "Available options:"
 	echo "  -f      show full git details, not just headers of changes."
 	echo "  -l      list repositories only, not the details."
-}
+} #}}}
 
-function search-ahead() {
+function search-ahead() { #{{{
 	TARGET_DIR="."
 	DETAIL_INFO=1
 	FULL_DETAIL=0
@@ -87,9 +87,9 @@ function search-ahead() {
 					--git-dir "$GIT_DIR" status
 		fi
 	done
-}
+} #}}}
 
-function help-uncommitted() {
+function help-uncommitted() { #{{{
 	echo "Usage: $0 uncommitted [PATH] [OPTIONS]"
 	echo "Find git repositories with uncommitted changes."
 	echo
@@ -101,9 +101,9 @@ function help-uncommitted() {
 	echo "  -w      add blank line after each repository."
 	echo "  -t      search for uncommitted changes in tracked files only"
 	echo "          (skip Untracked files)."
-}
+} #}}}
 
-function search-uncommitted() {
+function search-uncommitted() { #{{{
 	TARGET_DIR="."
 	DETAIL_INFO=1
 	WHITE_LINE=0
@@ -159,7 +159,7 @@ function search-uncommitted() {
 			[ $WHITE_LINE -gt 0 ] && echo
 		fi
 	done
-}
+} #}}}
 
 if [ ${#*} -lt 1 ]; then
 	echo "Not enough arguments, specify find method."
