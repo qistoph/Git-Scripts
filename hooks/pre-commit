@@ -5,6 +5,17 @@
 # This tag can then be used to prevent checking in sensitive lines, e.g. lines
 # containing passwords.
 #
+# Example:
+# The following script contains a password, therefore I'v added NOCOMMIT comment
+# #!/bin/bash
+# # NOCOMMIT - remove password and this line
+# password="secret"
+#
+# Before committing I'm forced to change the script, I'd change it to
+# #!/bin/bash
+# # change the password below
+# password="example"
+#
 # To temporarily disable this script, for example to commit documentation
 # describing this functionality, set the ALLOW_FORBIDDEN_TAG environment
 # variable:
