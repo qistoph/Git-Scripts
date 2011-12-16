@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# git-find
+# Chris van Marle 2011
+#
+# git-find is a bash script that assists in managing your git repositories
+# This script allows you to find repositories that:
+# - are ahead of their origin
+# - have uncommitted changes
+
 # Exit if undeclared variables are used
 set -o nounset
 
@@ -77,9 +85,11 @@ function help-uncommitted() {
 	echo "If PATH is omitted, the current path is used."
 	echo
 	echo "Available options:"
+	echo "  -f      show full details, not just headers of changes."
 	echo "  -l      list repositories only, not the changes."
 	echo "  -w      add blank line after each repository."
-	echo "  -f      show full details, not just headers of changes."
+	echo "  -t      search for uncommitted changes in tracked files only"
+	echo "          (skip Untracked files)."
 }
 
 function search-uncommitted() {
@@ -87,6 +97,7 @@ function search-uncommitted() {
 	DETAIL_INFO=1
 	WHITE_LINE=0
 	FULL_DETAIL=0
+	TRACKED_FILES_ONLY=0
 
 	for ARG in ${@:2}; do
 		# echo "ARG: $ARG"
@@ -105,18 +116,23 @@ function search-uncommitted() {
 				DETAIL_INFO=0
 				FULL_DETAIL=1
 				;;
+			-t)
+				TRACKED_FILES_ONLY=1
+				;;
 			*)
 				TARGET_DIR="$ARG"
 				;;
 		esac
 	done
 
+	[ $TRACKED_FILES_ONLY -gt 0 ] && GREP_LINE="^# Changes" || GREP_LINE="^# Changes\|^# Untracked"
+
 	echo "Searching in $TARGET_DIR"
 	for GIT_DIR in $(find "$TARGET_DIR" -name '.git'); do
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
-		AHEAD_INFO=$(git --work-tree "$WORK_TREE" --git-dir "$GIT_DIR" status | grep "Changes\|Untracked")
+		AHEAD_INFO=$(git --work-tree "$WORK_TREE" --git-dir "$GIT_DIR" status | grep "$GREP_LINE")
 		GREP_RES=$?
 		set -o errexit # restore exit on error
 
