@@ -30,15 +30,15 @@ function git-find-help() {
 	echo "Find git repositories using the specified method."
 	echo
 	echo "Available METHODs:"
-	echo "  ahead-origin      find git repositories ahead of origin."
+	echo "  ahead             find git repositories ahead of origin."
 	echo "  uncommitted       find git repositories with uncommited changes."
 	echo
 	echo "For information about the METHOD OPTIONS use"
 	echo "  $0 <method> --help"
 }
 
-function help-ahead-origin() {
-	echo "Usage: $0 ahead-origin [path]"
+function help-ahead() {
+	echo "Usage: $0 ahead [path]"
 	echo "Find git repositories ahead of origin."
 	echo
 	echo "If [path] is omitted, the current path is used."
@@ -47,7 +47,7 @@ function help-ahead-origin() {
 	echo "  -l      list repositories only, not the details."
 }
 
-function search-ahead-origin() {
+function search-ahead() {
 	TARGET_DIR="."
 	DETAIL_INFO=1
 
@@ -55,7 +55,7 @@ function search-ahead-origin() {
 		# echo "ARG: $ARG"
 		case "$ARG" in
 			--help)
-				help-ahead-origin
+				help-ahead
 				exit
 				;;
 			-l)
@@ -152,8 +152,8 @@ function search-uncommitted() {
 }
 
 case "$1" in
-ahead-origin)
-	search-ahead-origin $@
+ahead)
+	search-ahead $@
 	;;
 uncommitted)
 	search-uncommitted $@
