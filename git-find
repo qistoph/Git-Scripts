@@ -44,12 +44,14 @@ function help-ahead() {
 	echo "If [path] is omitted, the current path is used."
 	echo
 	echo "Available options:"
+	echo "  -f      show full git details, not just headers of changes."
 	echo "  -l      list repositories only, not the details."
 }
 
 function search-ahead() {
 	TARGET_DIR="."
 	DETAIL_INFO=1
+	FULL_DETAIL=0
 
 	for ARG in ${@:2}; do
 		# echo "ARG: $ARG"
@@ -60,6 +62,10 @@ function search-ahead() {
 				;;
 			-l)
 				DETAIL_INFO=0
+				;;
+			-f)
+				DETAIL_INFO=0
+				FULL_DETAIL=1
 				;;
 			*)
 				TARGET_DIR="$ARG"
@@ -80,6 +86,9 @@ function search-ahead() {
 			[ $DETAIL_INFO -gt 0 ] && \
 				echo "$WORK_TREE: $AHEAD_INFO" ||
 				echo "$WORK_TREE"
+			[ $FULL_DETAIL -gt 0 ] && \
+				git --work-tree "$WORK_TREE" \
+					--git-dir "$GIT_DIR" status
 		fi
 	done
 }
