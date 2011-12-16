@@ -100,7 +100,8 @@ function help-uncommitted() { #{{{
 	echo "  -l      list repositories only, not the changes."
 	echo "  -w      add blank line after each repository."
 	echo "  -t      search for uncommitted changes in tracked files only"
-	echo "          (skip Untracked files)."
+	echo "          (skip untracked files)."
+	echo "  -u      search for untracked files only (skip tracked files"
 } #}}}
 
 function search-uncommitted() { #{{{
@@ -109,6 +110,7 @@ function search-uncommitted() { #{{{
 	WHITE_LINE=0
 	FULL_DETAIL=0
 	TRACKED_FILES_ONLY=0
+	UNTRACKED_FILES_ONLY=0
 
 	for ARG in ${@:2}; do
 		# echo "ARG: $ARG"
@@ -130,16 +132,23 @@ function search-uncommitted() { #{{{
 			-t)
 				TRACKED_FILES_ONLY=1
 				;;
+			-u)
+				UNTRACKED_FILES_ONLY=1
+				;;
 			*)
 				TARGET_DIR="$ARG"
 				;;
 		esac
 	done
 
-	[ $TRACKED_FILES_ONLY -gt 0 ] && \
-		GREP_LINE="^# Changes" || \
+	if [ $TRACKED_FILES_ONLY -gt 0 ]; then
+		GREP_LINE="^# Changes"
+	elif [ $UNTRACKED_FILES_ONLY -gt 0 ]; then
+		GREP_LINE="^# Untracked"
+	else
 		GREP_LINE="^# Changes\|^# Untracked"
-
+	fi
+	
 	echo "Searching in $TARGET_DIR"
 	for GIT_DIR in $(find "$TARGET_DIR" -name '.git'); do
 		WORK_TREE=${GIT_DIR%/.git}
