@@ -48,8 +48,8 @@ function search-ahead() { #{{{
 	DETAIL_INFO=1
 	FULL_DETAIL=0
 
-	for ARG in ${@:2}; do
-		# echo "ARG: $ARG"
+	for ((ARG_N=1; ARG_N<${#ARGS_ALL[@]}; ++ARG_N)); do
+		ARG=${ARGS_ALL[$ARG_N]}
 		case "$ARG" in
 			-h|--help|-help)
 				help-ahead
@@ -63,13 +63,15 @@ function search-ahead() { #{{{
 				FULL_DETAIL=1
 				;;
 			*)
-				TARGET_DIR="$ARG"
+				[ "$TARGET_DIR" = "." ] && TARGET_DIR="\"$ARG\"" || \
+					TARGET_DIR="$TARGET_DIR \"$ARG\""
 				;;
 		esac
 	done
 
-	echo "Searching..."
-	for GIT_DIR in $(find "$TARGET_DIR" -name '.git'); do
+	echo "Searching in $TARGET_DIR"
+	cmd="find $TARGET_DIR -name '.git'"
+	for GIT_DIR in $(eval $cmd); do
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
@@ -112,8 +114,9 @@ function search-uncommitted() { #{{{
 	TRACKED_FILES_ONLY=0
 	UNTRACKED_FILES_ONLY=0
 
-	for ARG in ${@:2}; do
-		# echo "ARG: $ARG"
+	for ((ARG_N=1; ARG_N<${#ARGS_ALL[@]}; ++ARG_N)); do
+		ARG=${ARGS_ALL[$ARG_N]}
+		#echo "ARG: $ARG"
 		case "$ARG" in
 			-h|--help|-help)
 				help-uncommitted
@@ -136,7 +139,8 @@ function search-uncommitted() { #{{{
 				UNTRACKED_FILES_ONLY=1
 				;;
 			*)
-				TARGET_DIR="$ARG"
+				[ "$TARGET_DIR" = "." ] && TARGET_DIR="\"$ARG\"" || \
+					TARGET_DIR="$TARGET_DIR \"$ARG\""
 				;;
 		esac
 	done
@@ -150,7 +154,8 @@ function search-uncommitted() { #{{{
 	fi
 	
 	echo "Searching in $TARGET_DIR"
-	for GIT_DIR in $(find "$TARGET_DIR" -name '.git'); do
+	cmd="find $TARGET_DIR -name '.git'"
+	for GIT_DIR in $(eval $cmd); do
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
@@ -177,12 +182,14 @@ if [ ${#*} -lt 1 ]; then
 	exit 1
 fi
 
+ARGS_ALL=("$@")
+
 case "$1" in
 ahead)
-	search-ahead $@
+	search-ahead
 	;;
 uncommitted)
-	search-uncommitted $@
+	search-uncommitted
 	;;
 -h|--help|-help)
 	git-find-help $@
