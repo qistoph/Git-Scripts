@@ -14,6 +14,12 @@ set -o nounset
 # Exit if any command exits with error
 set -o errexit
 
+function control_c() {
+	exit 1
+}
+
+trap control_c SIGINT
+
 if [ ${#*} -lt 1 ]; then
 	echo "Not enough arguments, specify find method."
 	exit 1
