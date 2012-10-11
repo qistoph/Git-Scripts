@@ -70,8 +70,8 @@ function search-ahead() { #{{{
 	done
 
 	echo "Searching in $TARGET_DIR"
-	cmd="find $TARGET_DIR -name '.git'"
-	for GIT_DIR in $(eval $cmd); do
+	cmd="find \"$TARGET_DIR\" -name '.git'"
+	eval $cmd | while read GIT_DIR; do 
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
@@ -154,8 +154,8 @@ function search-uncommitted() { #{{{
 	fi
 	
 	echo "Searching in $TARGET_DIR"
-	cmd="find $TARGET_DIR -name '.git'"
-	for GIT_DIR in $(eval $cmd); do
+	cmd="find \"$TARGET_DIR\" -name '.git'"
+	eval $cmd | while read GIT_DIR; do 
 		WORK_TREE=${GIT_DIR%/.git}
 
 		set +o errexit # disable exit on error for grep
